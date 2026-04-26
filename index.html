@@ -644,6 +644,18 @@ margin-top:120px;
 </div>
 </div>
 
+
+
+<h2>Nova Obra</h2>
+
+<input id="nomeObra" placeholder="Nome da obra">
+<input id="cliente" placeholder="Nome do cliente">
+
+<button onclick="criarObra()">Criar Obra</button>
+
+<h2>Obras</h2>
+<div id="listaObras"></div>
+   
 </section>
 
 <section id="produtos" style="display:none">
@@ -4292,6 +4304,43 @@ clientesDevedores;
 
 }
 
+
+   async function criarObra() {
+  const nome = document.getElementById("nomeObra").value;
+  const cliente = document.getElementById("cliente").value;
+
+  const { data, error } = await supabase
+    .from("obras")
+    .insert([
+      { nome, cliente }
+    ]);
+
+  if (error) {
+    alert("Erro ao criar obra");
+    console.error(error);
+  } else {
+    alert("Obra criada com sucesso!");
+  }
+}
+
+
+   async function listarObras() {
+  const { data, error } = await supabase
+    .from("obras")
+    .select("*");
+
+  const lista = document.getElementById("listaObras");
+  lista.innerHTML = "";
+
+  data.forEach(obra => {
+    lista.innerHTML += `
+      <div>
+        <strong>${obra.nome}</strong> - ${obra.cliente}
+      </div>
+    `;
+  });
+}
+   
    
 </script>
 
